@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio IT | Auditoría de Hardware HP 14</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <span class="logo">~/portfolio-it</span>
+            <nav>
+                <a href="#resumen">Resumen</a>
+                <a href="#diagnostico">Diagnóstico</a>
+                <a href="#incidencia">Incidencia HWiNFO</a>
+                <a href="#conclusiones">Conclusiones</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="case-study">
+            <div class="badge">Caso de Estudio #01 • Soporte N1/N2 & Diagnóstico</div>
+            <h1>Auditoría de Hardware, Telemetría y Control Térmico en Portátil HP 14</h1>
+            <p class="subtitle">Análisis S.M.A.R.T., monitorización de sensores térmicos y resolución de conflictos de telemetría oneAPI en Windows 11.</p>
+
+            <section id="resumen" class="card">
+                <h2>1. Resumen del Equipo y Objetivo</h2>
+                <ul class="specs-grid">
+                    <li><strong>Equipo:</strong> Portátil HP 14 (<code>hp14</code>)</li>
+                    <li><strong>CPU / GPU:</strong> Intel Core Ultra 7 255U + Intel Arc/Xe Graphics</li>
+                    <li><strong>Memoria RAM:</strong> 16 GB</li>
+                    <li><strong>Sistema Operativo:</strong> Windows 11 (Build 26300)</li>
+                </ul>
+                <p><strong>Objetivo técnico:</strong> Ejecutar una auditoría preventiva de salud del almacenamiento, evaluar la eficiencia térmica del procesador bajo carga ligera y resolver un fallo crítico de inicialización en herramientas de diagnóstico de bajo nivel.</p>
+            </section>
+
+            <section id="diagnostico" class="card">
+                <h2>2. Diagnóstico de Hardware y Telemetría</h2>
+                
+                <h3>Almacenamiento (Análisis S.M.A.R.T. con CrystalDiskInfo)</h3>
+                <ul>
+                    <li><strong>Estado de salud general:</strong> <span class="status-ok">Bueno (100%)</span> — Sin sectores reasignados ni errores críticos de lectura/escritura.</li>
+                    <li><strong>Conclusión:</strong> Unidad SSD en parámetros óptimos para entornos de trabajo y virtualización local.</li>
+                </ul>
+                <img src="img/crystaldiskinfo-hp14.png" alt="Captura CrystalDiskInfo" style="max-width:100%; border-radius:6px; margin-top:12px;">
+                <h3>Rendimiento Térmico y CPU (HWiNFO64)</h3>
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <span class="metric-value">46 °C</span>
+                        <span class="metric-label">Temperatura en Reposo (Idle)</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-value">54 °C</span>
+                        <span class="metric-label">Pico Máximo Registrado</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-value">0 %</span>
+                        <span class="metric-label">Thermal Throttling</span>
+                    </div>
+                </div>
+                <p><strong>Análisis térmico:</strong> El procesador opera muy por debajo del umbral crítico (90 °C – 100 °C). El sistema de disipación mantiene frecuencias estables sin activar mecanismos de estrangulamiento térmico.</p>
+            <img src="img/hwinfo-hp14.png" alt="Captura HWiNFO" style="max-width:100%; border-radius:6px; margin-top:12px;">
+            </section>
+            
+            <section id="incidencia" class="card alert-card">
+                <h2>3. Resolución de Incidencias Técnicas Durante el Diagnóstico</h2>
+                <p>Durante la recolección de métricas con <strong>HWiNFO64 (v8.60)</strong>, el programa sufría un cierre inesperado (<em>crash</em>) en la fase de <strong>Detección de GPU</strong>.</p>
+                <ol>
+                    <li><strong>Análisis forense inicial:</strong> Mediante PowerShell (<code>Get-CimInstance Win32_VideoController</code>) se verificó que el driver OEM de Intel (<code>32.0.101.8424</code>) estaba actualizado y operativo, descartando fallos físicos.</li>
+                    <li><strong>Aislamiento del conflicto:</strong> Se detectó un choque en la inicialización de la librería de telemetría <code>Intel oneAPI</code> sobre la GPU integrada moderna.</li>
+                    <li><strong>Solución aplicada:</strong> Se deshabilitó el sondeo de <strong>Soporte oneAPI</strong> y del <strong>Embedded Controller (EC)</strong> en los ajustes de seguridad (<em>Safety</em>) de HWiNFO, logrando una lectura estable sin alterar el controlador gráfico OEM.</li>
+                </ol>
+            </section>
+
+            <section id="conclusiones" class="card">
+                <h2>4. Conclusiones y Optimización</h2>
+                <ul>
+                    <li><strong>Gestión de arranque:</strong> Auditoría de servicios residentes en el inicio de Windows 11 para optimizar el consumo de memoria RAM en reposo.</li>
+                    <li><strong>Veredicto técnico:</strong> Equipo certificado en óptimas condiciones de estabilidad térmica y salud de almacenamiento.</li>
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Documentación técnica generada y alojada sobre servidor Linux + Nginx.</p>
+        </div>
+    </footer>
+</body>
+</html>
